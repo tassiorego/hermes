@@ -30,7 +30,7 @@
     "eslint-plugin-prettier": "^3.2.0",
     "eslint-plugin-promise": "^4.2.1",
     "eslint-plugin-standard": "^4.0.1",
-    "jest": "^26.1.0",
+    "jest": "^26.6.3",
     "prettier": "^2.2.1",
     "ts-jest": "^26.1.2",
     "ts-node-dev": "^1.0.0-pre.51",
@@ -38,6 +38,7 @@
     "typescript": "^3.9.6"
   },
   "dependencies": {
-    "express": "^4.17.1"
+    "express": "^4.17.1",
+    "mongoose": "^5.11.7"
   }
 }
