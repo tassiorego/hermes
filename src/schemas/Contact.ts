@@ -1,7 +1,26 @@
-import { model, Schema } from 'mongoose';
+import { model, Schema, Document } from 'mongoose';
 
-const ContactSchema = new Schema({
-  email: { type: String },
-});
+type Contact = Document & {};
 
-export default model('users', ContactSchema);
+const ContactSchema = new Schema(
+  {
+    email: {
+      type: String,
+      lowercase: true,
+      trim: true,
+      unique: true,
+      required: true,
+    },
+    tags: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: 'tags',
+      },
+    ],
+  },
+  {
+    timestamps: true,
+  },
+);
+
+export default model<Contact>('contacts', ContactSchema);
