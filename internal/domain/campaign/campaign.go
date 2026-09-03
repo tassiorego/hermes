@@ -1,6 +1,7 @@
 package campaign
 
 import (
+	"errors"
 	"time"
 
 	"github.com/rs/xid"
@@ -26,12 +27,19 @@ func toContacts(emails []string) []Contact {
 	return contacts
 }
 
-func New(name, content string, contacts []string) *Campaign {
+func New(name, content string, contacts []string) (*Campaign, error) {
+	if name == "" {
+		return nil, errors.New("Name is required")
+	} else if content == "" {
+		return nil, errors.New("Content is required")
+	} else if len(contacts) == 0 {
+		return nil, errors.New("At least one contact is required")
+	}
 	return &Campaign{
 		ID:        xid.New().String(),
 		Name:      name,
 		CreatedAt: time.Now(),
 		Content:   content,
 		Contacts:  toContacts(contacts),
-	}
+	}, nil
 }
