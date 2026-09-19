@@ -4,6 +4,7 @@ import (
 	"testing"
 	"time"
 
+	"github.com/jaswdr/faker"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -11,6 +12,7 @@ var (
 	expectedName     = "Test Campaign"
 	expectedContent  = "This is a test campaign"
 	expectedContacts = []string{"test@example.com"}
+	fake             = faker.New()
 )
 
 func TestNewCampaign(t *testing.T) {
@@ -69,7 +71,7 @@ func Test_NewCampaign_LongName(t *testing.T) {
 	assert := assert.New(t)
 
 	// Act
-	_, err := New("a very long campaign name that exceeds the maximum allowed length of one hundred characters which should trigger a validation error", expectedContent, expectedContacts)
+	_, err := New(fake.Lorem().Text(120), expectedContent, expectedContacts)
 
 	// Assert
 	assert.ErrorContains(err, "Name must be at most 100 characters long")
@@ -95,6 +97,17 @@ func Test_NewCampaign_ShortContent(t *testing.T) {
 
 	// Assert
 	assert.ErrorContains(err, "Content must be at least 10 characters long")
+}
+
+func Test_NewCampaign_LongContent(t *testing.T) {
+	// Arrange
+	assert := assert.New(t)
+
+	// Act
+	_, err := New(expectedName, fake.Lorem().Text(1040), expectedContacts)
+
+	// Assert
+	assert.ErrorContains(err, "Content must be at most 1024 characters long")
 }
 
 func Test_NewCampaign_EmptyContacts(t *testing.T) {
