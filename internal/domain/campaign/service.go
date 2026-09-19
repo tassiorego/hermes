@@ -2,6 +2,7 @@ package campaign
 
 import (
 	"hermes/internal/contract"
+	internalerrors "hermes/internal/internal-errors"
 )
 
 type Service struct {
@@ -18,7 +19,7 @@ func (service *Service) Create(dto contract.CreateCampaignDTO) (string, error) {
 	err = service.repository.Save(campaign)
 
 	if err != nil {
-		return "", err
+		return "", internalerrors.InternalServerError
 	}
 
 	return campaign.ID, nil

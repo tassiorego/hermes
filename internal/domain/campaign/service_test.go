@@ -3,6 +3,7 @@ package campaign
 import (
 	"errors"
 	"hermes/internal/contract"
+	internalerrors "hermes/internal/internal-errors"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -81,6 +82,7 @@ func TestService_CreateCampaign_RepositorySaveError(t *testing.T) {
 
 	// Assert
 	assert.NotNil(err)
-	assert.EqualError(err, "Error saving campaign")
+	assert.EqualError(err, internalerrors.InternalServerError.Error())
+	assert.True(errors.Is(internalerrors.InternalServerError, err))
 	assert.Empty(id)
 }
