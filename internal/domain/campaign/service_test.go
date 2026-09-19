@@ -1,6 +1,7 @@
 package campaign
 
 import (
+	"errors"
 	"hermes/internal/contract"
 	"testing"
 
@@ -17,17 +18,23 @@ func (mockedRepository *MockRepository) Save(campaign *Campaign) error {
 	return args.Error(0)
 }
 
-func TestService_CreateCampaign(t *testing.T) {
-	// Arrange
-	assert := assert.New(t)
-	newCampaignDTO := contract.CreateCampaignDTO{
+var (
+	newCampaignDTO = contract.CreateCampaignDTO{
 		Name:     "Test Campaign",
 		Content:  "This is a test campaign",
 		Contacts: []string{"test@example.com"},
 	}
-	repositoryMock := new(MockRepository)
+	mockRepository = new(MockRepository)
+	service        = Service{
+		repository: mockRepository,
+	}
+)
 
-	repositoryMock.On("Save", mock.MatchedBy(func(campaign *Campaign) bool {
+func TestService_CreateCampaign(t *testing.T) {
+	// Arrange
+	assert := assert.New(t)
+
+	mockRepository.On("Save", mock.MatchedBy(func(campaign *Campaign) bool {
 		if campaign.Name != newCampaignDTO.Name {
 			return false
 		} else if campaign.Content != newCampaignDTO.Content {
@@ -40,14 +47,40 @@ func TestService_CreateCampaign(t *testing.T) {
 		return true
 	})).Return(nil)
 
-	service := Service{
-		repository: repositoryMock,
-	}
-
 	// Act
 	id, err := service.Create(newCampaignDTO)
 	// Assert
 	assert.NoError(err)
 	assert.NotEmpty(id)
-	repositoryMock.AssertCalled(t, "Save", mock.AnythingOfType("*campaign.Campaign"))
+	mockRepository.AssertCalled(t, "Save", mock.AnythingOfType("*campaign.Campaign"))
+}
+
+func TestService_CreateCampaign_RepositoryError(t *testing.T) {
+	// Arrange
+	assert := assert.New(t)
+	newCampaignDTO.Name = ""
+	// Act
+	id, err := service.Create(newCampaignDTO)
+
+	// Assert
+	assert.NotNil(err)
+	assert.EqualError(err, "Name is required")
+	assert.Empty(id)
+}
+
+func TestService_CreateCampaign_RepositorySaveError(t *testing.T) {
+	// Arrange
+	assert := assert.New(t)
+	mockRepository = new(MockRepository)
+	newCampaignDTO.Name = "Test Campaign"
+	mockRepository.On("Save", mock.Anything).Return(errors.New("Error saving campaign"))
+	service.repository = mockRepository
+
+	// Act
+	id, err := service.Create(newCampaignDTO)
+
+	// Assert
+	assert.NotNil(err)
+	assert.EqualError(err, "Error saving campaign")
+	assert.Empty(id)
 }

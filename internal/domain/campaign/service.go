@@ -9,9 +9,17 @@ type Service struct {
 }
 
 func (service *Service) Create(dto contract.CreateCampaignDTO) (string, error) {
-	campaign, _ := New(dto.Name, dto.Content, dto.Contacts)
+	campaign, err := New(dto.Name, dto.Content, dto.Contacts)
 
-	service.repository.Save(campaign)
+	if err != nil {
+		return "", err
+	}
+
+	err = service.repository.Save(campaign)
+
+	if err != nil {
+		return "", err
+	}
 
 	return campaign.ID, nil
 }
