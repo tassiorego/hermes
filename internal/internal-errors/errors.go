@@ -2,7 +2,7 @@ package internalerrors
 
 import "errors"
 
-var InternalServerError error = errors.New("Internal server error")
+var InternalServerError error = errors.New("Internal servererror")
 var NotFoundError error = errors.New("Not found")
 var ValidationError error = errors.New("Validation error")
 var UnauthorizedError error = errors.New("Unauthorized")

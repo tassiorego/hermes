@@ -53,6 +53,28 @@ func Test_NewCampaign_EmptyName(t *testing.T) {
 	assert.ErrorContains(err, "Name is required")
 }
 
+func Test_NewCampaign_ShortName(t *testing.T) {
+	// Arrange
+	assert := assert.New(t)
+
+	// Act
+	_, err := New("abc", expectedContent, expectedContacts)
+
+	// Assert
+	assert.ErrorContains(err, "Name must be at least 5 characters long")
+}
+
+func Test_NewCampaign_LongName(t *testing.T) {
+	// Arrange
+	assert := assert.New(t)
+
+	// Act
+	_, err := New("a very long campaign name that exceeds the maximum allowed length of one hundred characters which should trigger a validation error", expectedContent, expectedContacts)
+
+	// Assert
+	assert.ErrorContains(err, "Name must be at most 100 characters long")
+}
+
 func Test_NewCampaign_EmptyContent(t *testing.T) {
 	// Arrange
 	assert := assert.New(t)
@@ -63,6 +85,18 @@ func Test_NewCampaign_EmptyContent(t *testing.T) {
 	// Assert
 	assert.ErrorContains(err, "Content is required")
 }
+
+func Test_NewCampaign_ShortContent(t *testing.T) {
+	// Arrange
+	assert := assert.New(t)
+
+	// Act
+	_, err := New(expectedName, "short", expectedContacts)
+
+	// Assert
+	assert.ErrorContains(err, "Content must be at least 10 characters long")
+}
+
 func Test_NewCampaign_EmptyContacts(t *testing.T) {
 	// Arrange
 	assert := assert.New(t)
@@ -71,5 +105,5 @@ func Test_NewCampaign_EmptyContacts(t *testing.T) {
 	_, err := New(expectedName, expectedContent, []string{})
 
 	// Assert
-	assert.ErrorContains(err, "At least one contact is required")
+	assert.ErrorContains(err, "Contacts must be at least 1 characters long")
 }
