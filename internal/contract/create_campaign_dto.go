@@ -1,7 +1,7 @@
 package contract
 
 type CreateCampaignDTO struct {
-	Name     string
-	Content  string
-	Contacts []string
+	Name     string   `json:"name"`
+	Content  string   `json:"content"`
+	Contacts []string `json:"contacts"`
 }
