@@ -3,10 +3,17 @@ package database
 import "hermes/internal/domain/campaign"
 
 type CampaignRepository struct {
-	campaigns []*campaign.Campaign
+	campaigns []campaign.Campaign
 }
 
 func (repo *CampaignRepository) Save(campaign *campaign.Campaign) error {
-	repo.campaigns = append(repo.campaigns, campaign)
+	repo.campaigns = append(repo.campaigns, *campaign)
 	return nil
+}
+
+func (repo *CampaignRepository) Get() []campaign.Campaign {
+	if repo.campaigns == nil {
+		return []campaign.Campaign{}
+	}
+	return repo.campaigns
 }

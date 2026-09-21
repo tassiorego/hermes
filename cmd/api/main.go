@@ -1,14 +1,13 @@
 package main
 
 import (
-	"hermes/internal/contract"
 	"hermes/internal/domain/campaign"
+	"hermes/internal/endpoints"
 	"hermes/internal/infrastructure/database"
 	"net/http"
 
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
-	"github.com/go-chi/render"
 )
 
 type Product struct {
@@ -23,23 +22,16 @@ func main() {
 	router.Use(middleware.Logger)
 	router.Use(middleware.Recoverer)
 
-	service := campaign.Service{
+	campaignService := campaign.Service{
 		Repository: &database.CampaignRepository{},
 	}
 
-	router.Post("/campaigns", func(res http.ResponseWriter, req *http.Request) {
-		var newCampaign contract.CreateCampaignDTO
-		render.Decode(req, &newCampaign)
-		id, err := service.Create(newCampaign)
+	handler := &endpoints.Handler{
+		CampaignService: campaignService,
+	}
 
-		if err != nil {
-			render.Status(req, http.StatusBadRequest)
-			render.JSON(res, req, map[string]interface{}{"error": err.Error()})
-			return
-		}
-		render.Status(req, http.StatusCreated)
-		render.JSON(res, req, map[string]interface{}{"id": id})
-	})
+	router.Post("/campaigns", handler.CreateCampaign)
+	router.Get("/campaigns", handler.GetCampaigns)
 
 	http.ListenAndServe(":3000", router)
 }

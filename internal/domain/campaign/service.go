@@ -24,3 +24,7 @@ func (service *Service) Create(dto contract.CreateCampaignDTO) (string, error) {
 
 	return campaign.ID, nil
 }
+
+func (service *Service) Get() []Campaign {
+	return service.Repository.Get()
+}
