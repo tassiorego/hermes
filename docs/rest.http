@@ -1,0 +1,11 @@
+GET http://localhost:3000/users
+
+### create a new product
+
+POST http://localhost:3000/products
+Content-Type: application/json
+
+{
+  "name": "iPhone 18",
+  "price": 100
+}
