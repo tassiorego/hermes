@@ -27,7 +27,7 @@ var (
 	}
 	mockRepository = new(MockRepository)
 	service        = Service{
-		repository: mockRepository,
+		Repository: mockRepository,
 	}
 )
 
@@ -75,7 +75,7 @@ func TestService_CreateCampaign_RepositorySaveError(t *testing.T) {
 	mockRepository = new(MockRepository)
 	newCampaignDTO.Name = "Test Campaign"
 	mockRepository.On("Save", mock.Anything).Return(errors.New("Error saving campaign"))
-	service.repository = mockRepository
+	service.Repository = mockRepository
 
 	// Act
 	id, err := service.Create(newCampaignDTO)

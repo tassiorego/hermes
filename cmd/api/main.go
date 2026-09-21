@@ -3,6 +3,7 @@ package main
 import (
 	"hermes/internal/contract"
 	"hermes/internal/domain/campaign"
+	"hermes/internal/infrastructure/database"
 	"net/http"
 
 	"github.com/go-chi/chi/v5"
@@ -22,7 +23,9 @@ func main() {
 	router.Use(middleware.Logger)
 	router.Use(middleware.Recoverer)
 
-	service := campaign.Service{}
+	service := campaign.Service{
+		Repository: &database.CampaignRepository{},
+	}
 
 	router.Post("/campaigns", func(res http.ResponseWriter, req *http.Request) {
 		var newCampaign contract.CreateCampaignDTO
