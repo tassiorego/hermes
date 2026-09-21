@@ -7,16 +7,13 @@ import (
 	"github.com/go-chi/render"
 )
 
-func (h *Handler) CreateCampaign(res http.ResponseWriter, req *http.Request) {
+func (h *Handler) CreateCampaign(res http.ResponseWriter, req *http.Request) (response any, err error) {
 	var newCampaign contract.CreateCampaignDTO
 	render.Decode(req, &newCampaign)
 	id, err := h.CampaignService.Create(newCampaign)
-
 	if err != nil {
-		render.Status(req, http.StatusBadRequest)
-		render.JSON(res, req, map[string]interface{}{"error": err.Error()})
-		return
+		return nil, err
 	}
-	render.Status(req, http.StatusCreated)
-	render.JSON(res, req, map[string]interface{}{"id": id})
+
+	return map[string]any{"id": id}, nil
 }

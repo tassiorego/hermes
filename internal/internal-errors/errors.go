@@ -11,3 +11,19 @@ var ConflictError error = errors.New("Conflict")
 var BadRequestError error = errors.New("Bad request")
 var ServiceUnavailableError error = errors.New("Service unavailable")
 var GatewayTimeoutError error = errors.New("Gateway timeout")
+
+var AppError error = errors.New("Application error")
+
+// appError keeps a custom message while still matching its kind via errors.Is.
+type appError struct {
+	kind    error
+	message string
+}
+
+func (e *appError) Error() string { return e.message }
+
+func (e *appError) Unwrap() error { return e.kind }
+
+func WithMessage(kind error, message string) error {
+	return &appError{kind: kind, message: message}
+}
