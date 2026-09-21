@@ -23,7 +23,7 @@ func ResponseHandler(successStatus int, endpoint EndpointFunc) http.HandlerFunc 
 			render.Status(r, status)
 			render.JSON(w, r, ErrorResponse{
 				Status:  status,
-				Message: err.Error(),
+				Message: internalerrors.MessageFor(err),
 			})
 			return
 		}

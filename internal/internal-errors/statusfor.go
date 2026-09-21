@@ -6,6 +6,7 @@ import (
 )
 
 func StatusFor(err error) int {
+
 	switch {
 	case errors.Is(err, ValidationError),
 		errors.Is(err, BadRequestError):
@@ -22,7 +23,26 @@ func StatusFor(err error) int {
 		return http.StatusServiceUnavailable
 	case errors.Is(err, GatewayTimeoutError):
 		return http.StatusGatewayTimeout
-	default: // InternalServerError and any unknown error
+	default:
 		return http.StatusInternalServerError
 	}
+}
+
+func MessageFor(err error) string {
+	if isUnknownError(err) {
+		return "Internal server error"
+	}
+	return err.Error()
+}
+
+func isUnknownError(err error) bool {
+	return !errors.Is(err, ValidationError) &&
+		!errors.Is(err, BadRequestError) &&
+		!errors.Is(err, UnauthorizedError) &&
+		!errors.Is(err, ForbiddenError) &&
+		!errors.Is(err, NotFoundError) &&
+		!errors.Is(err, ConflictError) &&
+		!errors.Is(err, ServiceUnavailableError) &&
+		!errors.Is(err, GatewayTimeoutError) &&
+		!errors.Is(err, InternalServerError)
 }
