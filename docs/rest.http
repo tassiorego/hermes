@@ -6,7 +6,7 @@ POST http://localhost:3000/campaigns
 Content-Type: application/json
 
 {
-  "name": "Summer Sale",
+  "name": "Summer Sale 50% Off",
   "content": "Up to 50% off on all summer items",
   "contacts": [
     "contact1@example.com",
