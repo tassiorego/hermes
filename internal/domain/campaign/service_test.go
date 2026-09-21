@@ -19,9 +19,9 @@ func (mockedRepository *MockRepository) Save(campaign *Campaign) error {
 	return args.Error(0)
 }
 
-func (mockedRepository *MockRepository) Get() []Campaign {
+func (mockedRepository *MockRepository) Get() ([]Campaign, error) {
 	args := mockedRepository.Called()
-	return args.Get(0).([]Campaign)
+	return args.Get(0).([]Campaign), args.Error(1)
 }
 
 var (

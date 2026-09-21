@@ -11,9 +11,9 @@ func (repo *CampaignRepository) Save(campaign *campaign.Campaign) error {
 	return nil
 }
 
-func (repo *CampaignRepository) Get() []campaign.Campaign {
+func (repo *CampaignRepository) Get() ([]campaign.Campaign, error) {
 	if repo.campaigns == nil {
-		return []campaign.Campaign{}
+		return []campaign.Campaign{}, nil
 	}
-	return repo.campaigns
+	return repo.campaigns, nil
 }
