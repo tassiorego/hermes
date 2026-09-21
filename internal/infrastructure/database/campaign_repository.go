@@ -1,7 +1,6 @@
 package database
 
 import (
-	"errors"
 	"hermes/internal/domain/campaign"
 )
 
@@ -12,7 +11,6 @@ type CampaignRepository struct {
 func (repo *CampaignRepository) Save(campaign *campaign.Campaign) error {
 	repo.campaigns = append(repo.campaigns, *campaign)
 
-	return errors.New("Deu ruim ")
 	return nil
 }
 
