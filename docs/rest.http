@@ -1,11 +1,15 @@
 GET http://localhost:3000/users
 
-### create a new product
+### create a new campaign
 
-POST http://localhost:3000/products
+POST http://localhost:3000/campaigns
 Content-Type: application/json
 
 {
-  "name": "iPhone 18",
-  "price": 100
+  "name": "Summer Sale",
+  "content": "Up to 50% off on all summer items",
+  "contacts": [
+    "contact1@example.com",
+    "contact2@example.com"
+  ]
 }
