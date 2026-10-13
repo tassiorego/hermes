@@ -91,7 +91,7 @@ func Test_NewCampaign_EmptyContacts(t *testing.T) {
 
 	_, err := New(expectedName, expectedContent, []string{})
 
-	assert.ErrorContains(err, "Contacts must be at least 1 characters long")
+	assert.ErrorContains(err, "Contacts must have at least 1 items")
 }
 
 func Test_NewCampaign_InvalidContactEmail(t *testing.T) {
